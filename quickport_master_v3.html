@@ -1,1 +1,818 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quickport CRM — Start your AI journey</title>
+  <link rel="icon" href="/Quickport-CRM-LOGO-2.jpg">
+  <meta name="description" content="Quickport CRM: AI-assisted automation for education businesses">
+  <style>
+    :root {
+      --qp-primary: #6a00ff;
+      --qp-primary-2: #9b5cff;
+      --qp-accent: #00e0ff;
+      --qp-bg: #0b0714;
+      --qp-card: #140e22;
+      --qp-text: #ffffff;
+      --qp-text-2: #d7cfff;
+      --qp-ok: #1ec28b;
+      --qp-warn: #ffb020;
+      --qp-error: #ff5a5a;
+      --qp-border: rgba(255,255,255,0.12);
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --focus: #00e0ff;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --qp-bg: #f8f6ff;
+        --qp-card: #ffffff;
+        --qp-text: #1b1328;
+        --qp-text-2: #3b2f56;
+        --qp-border: rgba(0,0,0,0.12);
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--qp-text);
+      background: linear-gradient(135deg, var(--qp-primary) 0%, var(--qp-primary-2) 60%, var(--qp-accent) 100%);
+      line-height: 1.5;
+    }
+    a { color: var(--qp-accent); text-decoration: none; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+    
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      backdrop-filter: saturate(120%) blur(6px);
+    }
+    header img { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+    header h1 { font-size: 18px; margin: 0; }
+    .badge {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--qp-border);
+      font-size: 12px;
+      background: rgba(255,255,255,0.06);
+    }
+    /* Hero container */
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      padding: 24px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    @media (max-width: 960px) {
+      main { grid-template-columns: 1fr; padding: 16px; }
+    }
+    /* Hero sections */
+    .hero-left, .hero-right {
+      background: linear-gradient(180deg, rgba(20,14,34,0.85), rgba(20,14,34,0.65));
+      border: 1px solid var(--qp-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .hero-right {
+      order: -1; /* Registration first in DOM for accessibility */
+    }
+    @media (min-width: 961px) {
+      .hero-right { order: 0; }
+    }
+    
+    /* Tier slider */
+    .tier-slider {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 520px;
+    }
+    .tier-slide {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      padding: 18px;
+      border: 1px solid var(--qp-border);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+    }
+    .tier-slide.active { display: flex; }
+    .tier-slide h3 { margin: 0; font-size: 20px; }
+    .tier-slide .mission { color: var(--qp-text-2); font-size: 14px; }
+    .tier-slide ul { list-style: none; padding: 0; margin: 8px 0; }
+    .tier-slide li { padding-left: 16px; position: relative; font-size: 13px; margin-bottom: 4px; }
+    .tier-slide li::before { content: "•"; position: absolute; left: 0; color: var(--qp-accent); }
+    .tier-slide .industries { font-size: 12px; color: var(--qp-text-2); margin-top: 8px; font-weight: 600; }
+    .tier-slide .price-badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(30,194,139,0.12);
+      color: #b8ffe6;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .tier-slide button {
+      margin-top: 8px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--qp-border);
+      background: transparent;
+      color: var(--qp-text-2);
+      cursor: not-allowed;
+      font: inherit;
+    }
+    .tier-slide .helper { font-size: 11px; color: var(--qp-text-2); margin-top: 4px; }
+    .tier-slide .caption { font-size: 10px; color: var(--qp-text-2); margin-top: 10px; border-top: 1px solid var(--qp-border); padding-top: 6px; }
+    .tier-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: auto;
+    }
+    .tier-controls button {
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--qp-border);
+      background: rgba(255,255,255,0.06);
+      color: var(--qp-text);
+      cursor: pointer;
+      font: inherit;
+    }
+    .tier-controls button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .tier-controls button:hover:not(:disabled) {
+      background: rgba(255,255,255,0.12);
+    }
+    /* Registration card */
+    .reg-card h2 { margin: 0 0 8px; font-size: 22px; }
+    .reg-card .subline { color: var(--qp-text-2); font-size: 13px; margin-bottom: 16px; }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    label { font-weight: 600; font-size: 14px; }
+    input, button {
+      font: inherit;
+      color: inherit;
+      background: #0e0a19;
+      border: 1px solid var(--qp-border);
+      padding: 12px;
+      border-radius: 10px;
+    }
+    input:focus {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+      border-color: transparent;
+    }
+    .hint { color: var(--qp-text-2); font-size: 12px; }
+    .error { color: var(--qp-error); font-size: 12px; }
+    .btn {
+      cursor: pointer;
+      border: none;
+      background: linear-gradient(135deg, var(--qp-accent), #7cf3ff);
+      color: #00141a;
+      font-weight: 800;
+      padding: 12px 16px;
+      border-radius: 10px;
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0,224,255,0.4);
+    }
+    
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal {
+      width: min(520px, 92vw);
+      background: var(--qp-card);
+      border: 1px solid var(--qp-border);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .modal-header h3 { margin: 0; font-size: 18px; }
+    .close {
+      background: transparent;
+      border: 1px solid var(--qp-border);
+      color: var(--qp-text-2);
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .otp-box {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 12px 0;
+    }
+    .otp-box input {
+      width: 42px;
+      height: 56px;
+      text-align: center;
+      font-size: 22px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .muted { color: var(--qp-text-2); font-size: 12px; }
+    .dlt-footer {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--qp-border);
+      font-size: 11px;
+      color: var(--qp-text-2);
+    }
+    .tooltip {
+      position: relative;
+      cursor: help;
+      display: inline-block;
+    }
+    .tooltip:hover .tip, .tooltip:focus .tip {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .tip {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 6px);
+      background: #110b1d;
+      color: #dcd3ff;
+      padding: 10px 12px;
+      border: 1px solid var(--qp-border);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      width: 280px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: 0.2s;
+      pointer-events: none;
+      z-index: 10;
+    }
+    /* Footer */
+    footer {
+      padding: 16px 20px;
+      color: var(--qp-text-2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+    /* FAB */
+    .fab {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: var(--qp-accent);
+      color: #00141a;
+      border-radius: 999px;
+      padding: 14px 16px;
+      font-weight: 800;
+      border: none;
+      box-shadow: var(--shadow);
+      z-index: 200;
+      cursor: pointer;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="sr-only" href="#registration">Skip to registration</a>
+  <header role="banner">
+    <img src="/Quickport-CRM-LOGO-2.jpg" alt="Quickport CRM logo">
+    <h1>Quickport CRM</h1>
+    <span class="badge" aria-label="Compliance status">
+      ISO/IEC 27001 in progress • DLT governance • India‑first, global rollout
+    </span>
+  </header>
+  <main role="main">
+    <!-- Tier slider (left hero) -->
+    <section class="hero-left" aria-labelledby="tier-title">
+      <h2 id="tier-title" class="sr-only">Tier Architecture</h2>
+      <div class="tier-slider" role="region" aria-live="polite" aria-atomic="true">
+        <div class="tier-slide active" data-tier="0">
+          <span class="price-badge">₹ 199/month*</span>
+          <h3>FOUNDATION</h3>
+          <p class="mission">Setup & Operate</p>
+          <ul>
+            <li>RBAC, MFA, encryption (aligned/ready)</li>
+            <li>Mobile CRM dashboard</li>
+            <li>Customer onboarding & profiles</li>
+            <li>Engagement history incl. financials</li>
+            <li>Appointments, reminders, confirmations</li>
+            <li>Support tickets with SLAs</li>
+          </ul>
+          <p class="industries"><strong>Industries:</strong> Education</p>
+          <button disabled aria-disabled="true">Start Free Trial</button>
+          <p class="helper">Trials open soon</p>
+          <p class="caption">* Prices are exclusive of GST and applicable gateway or carrier fees.</p>
+        </div>
+        <div class="tier-slide" data-tier="1">
+          <span class="price-badge">₹ 399/month*</span>
+          <h3>ENGAGE</h3>
+          <p class="mission">Communicate & Retain</p>
+          <ul>
+            <li>Campaigns with templates</li>
+            <li>Surveys, polls, reviews</li>
+            <li>Loyalty & referrals</li>
+            <li>Lead capture & segmentation</li>
+            <li>Social publishing (lite)</li>
+            <li>Dynamic content mgmt</li>
+          </ul>
+          <p class="industries"><strong>Industries:</strong> Education, Healthcare</p>
+          <button disabled aria-disabled="true">Start Free Trial</button>
+          <p class="helper">Trials open soon</p>
+          <p class="caption">* Prices are exclusive of GST and applicable gateway or carrier fees.</p>
+        </div>
+        <div class="tier-slide" data-tier="2">
+          <span class="price-badge">₹ 599/month*</span>
+          <h3>AUTOMATE</h3>
+          <p class="mission">Scale & Streamline</p>
+          <ul>
+            <li>Marketing automation (drips, triggers)</li>
+            <li>Email monitoring & auto-responses</li>
+            <li>Real-time dashboards & alerts</li>
+            <li>Standard analytics & ROI reports</li>
+            <li>Open architecture for integrations</li>
+            <li>E-commerce integrations (cart recovery)</li>
+          </ul>
+          <p class="industries"><strong>Industries:</strong> Education, Services</p>
+          <button disabled aria-disabled="true">Start Free Trial</button>
+          <p class="helper">Trials open soon</p>
+          <p class="caption">* Prices are exclusive of GST and applicable gateway or carrier fees.</p>
+        </div>
+        <div class="tier-slide" data-tier="3">
+          <span class="price-badge">₹ 799/month*</span>
+          <h3>INTELLIGENCE</h3>
+          <p class="mission">Anticipate & Personalize</p>
+          <ul>
+            <li>Predictive analytics (churn, CLV, NBA)</li>
+            <li>Cohort & sentiment analysis</li>
+            <li>GenAI assistants for agents</li>
+            <li>Omnichannel orchestration (CDP-lite)</li>
+          </ul>
+          <p class="industries"><strong>Industries:</strong> Call Centers, Healthcare</p>
+          <button disabled aria-disabled="true">Start Free Trial</button>
+          <p class="helper">Trials open soon</p>
+          <p class="caption">* Prices are exclusive of GST and applicable gateway or carrier fees.</p>
+        </div>
+        <div class="tier-slide" data-tier="4">
+          <span class="price-badge">₹ 1299/month*</span>
+          <h3>INNOVATION</h3>
+          <p class="mission">Redefine & Lead</p>
+          <ul>
+            <li>Voice/IVR via Twilio/Exotel/Airtel IQ</li>
+            <li>NLP-based voice bots (self-service)</li>
+            <li>Call centre console & QA dashboards</li>
+            <li>GenAI workflow agents (autonomous ops)</li>
+            <li>AR/VR & metaverse experiences</li>
+          </ul>
+          <p class="industries"><strong>Industries:</strong> Call Centres, E‑commerce</p>
+          <button disabled aria-disabled="true">Start Free Trial</button>
+          <p class="helper">Trials open soon</p>
+          <p class="caption">* Prices are exclusive of GST and applicable gateway or carrier fees.</p>
+        </div>
+      </div>
+      <div class="tier-controls">
+        <button id="tierPrev" aria-label="Previous tier">↑ Prev</button>
+        <button id="tierNext" aria-label="Next tier">↓ Next</button>
+      </div>
+    </section>
+    <!-- Registration card (right hero, first in DOM) -->
+    <section class="hero-right reg-card" id="registration" aria-labelledby="reg-title">
+      <h2 id="reg-title">Start your AI journey with Quickport CRM — free to explore.</h2>
+      <p class="subline">Discover how simple AI transforms customer connections</p>
+      <form id="regForm" novalidate>
+        <div class="form-group">
+          <label for="businessName">Business Name*</label>
+          <input id="businessName" name="businessName" autocomplete="organization" required aria-describedby="businessNameErr">
+          <div class="error" id="businessNameErr" aria-live="polite"></div>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number* (India)</label>
+          <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" required aria-describedby="phoneErr">
+          <div class="hint">Use E.164 like +919876543210 (starts 6–9)</div>
+          <div class="error" id="phoneErr" aria-live="polite"></div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address*</label>
+          <input id="email" name="email" type="email" autocomplete="email" required aria-describedby="emailErr">
+          <div class="hint">Use your business email if available.</div>
+          <div class="error" id="emailErr" aria-live="polite"></div>
+        </div>
+        <button class="btn" id="submitBtn" type="submit">Get Started</button>
+      </form>
+    </section>
+  </main>
+  <!-- Phone OTP Modal -->
+  <div class="modal-backdrop" id="phoneOtpBackdrop" role="dialog" aria-modal="true" aria-labelledby="phoneOtpTitle">
+    <div class="modal" role="document">
+      <div class="modal-header">
+        <h3 id="phoneOtpTitle">Verify your mobile number</h3>
+        <button class="close" data-close="phoneOtpBackdrop" aria-label="Close">Close</button>
+      </div>
+      <p class="muted">Enter the 6-digit code sent to your phone.</p>
+      <div class="otp-box" id="phoneOtpInputs" aria-label="Phone OTP inputs">
+        <input aria-label="Digit 1" inputmode="numeric" pattern="\d*" maxlength="1" autocomplete="one-time-code">
+        <input aria-label="Digit 2" inputmode="numeric" pattern="\d*" maxlength="1" autocomplete="one-time-code">
+        <input aria-label="Digit 3" inputmode="numeric" pattern="\d*" maxlength="1" autocomplete="one-time-code">
+        <input aria-label="Digit 4" inputmode="numeric" pattern="\d*" maxlength="1" autocomplete="one-time-code">
+        <input aria-label="Digit 5" inputmode="numeric" pattern="\d*" maxlength="1" autocomplete="one-time-code">
+        <input aria-label="Digit 6" inputmode="numeric" pattern="\d*" maxlength="1" autocomplete="one-time-code">
+      </div>
+      <div class="modal-actions">
+        <button class="btn" id="phoneVerifyBtn">Verify</button>
+        <button class="btn" id="phoneResendBtn">Resend (30s)</button>
+        <span class="muted" id="phoneAttempts">Attempts left: 5</span>
+      </div>
+      <div class="error" id="phoneOtpErr" aria-live="polite"></div>
+      <div class="dlt-footer">
+        <strong>DLT Template in Use</strong><br>
+        "##OTP## is your Quickport CRM login OTP for Mobile Verification."
+        <span class="tooltip" tabindex="0">ℹ️
+          <span class="tip">DLT placeholders use {#var#} server-side. Category: Service-Implicit. Approved by DoT.</span>
+        </span>
+        <br>
+        <small>Template ID: <span id="templId">—</span> • Header: <span id="templHeader">—</span> • Req ID: <span id="reqId">—</span></small>
+      </div>
+    </div>
+  </div>
+  <!-- Email OTP Modal -->
+  <div class="modal-backdrop" id="emailOtpBackdrop" role="dialog" aria-modal="true" aria-labelledby="emailOtpTitle">
+    <div class="modal" role="document">
+      <div class="modal-header">
+        <h3 id="emailOtpTitle">Verify your email</h3>
+        <button class="close" data-close="emailOtpBackdrop" aria-label="Close">Close</button>
+      </div>
+      <p class="muted">Enter the 6-digit code sent to your email.</p>
+      <div class="otp-box" id="emailOtpInputs" aria-label="Email OTP inputs">
+        <input aria-label="Digit 1" inputmode="numeric" pattern="\d*" maxlength="1">
+        <input aria-label="Digit 2" inputmode="numeric" pattern="\d*" maxlength="1">
+        <input aria-label="Digit 3" inputmode="numeric" pattern="\d*" maxlength="1">
+        <input aria-label="Digit 4" inputmode="numeric" pattern="\d*" maxlength="1">
+        <input aria-label="Digit 5" inputmode="numeric" pattern="\d*" maxlength="1">
+        <input aria-label="Digit 6" inputmode="numeric" pattern="\d*" maxlength="1">
+      </div>
+      <div class="modal-actions">
+        <button class="btn" id="emailVerifyBtn">Verify Email</button>
+        <button class="btn" id="emailResendBtn">Resend</button>
+      </div>
+      <div class="error" id="emailOtpErr" aria-live="polite"></div>
+    </div>
+  </div>
+  <!-- Contact Modal -->
+  <div class="modal-backdrop" id="contactBackdrop" role="dialog" aria-modal="true" aria-labelledby="contactTitle">
+    <div class="modal" role="document">
+      <div class="modal-header">
+        <h3 id="contactTitle">Contact Quickport CRM</h3>
+        <button class="close" data-close="contactBackdrop" aria-label="Close">Close</button>
+      </div>
+      <form id="contactForm" novalidate>
+        <div class="form-group">
+          <label for="cname">Name</label>
+          <input id="cname" name="cname" autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="cemail">Email</label>
+          <input id="cemail" name="cemail" type="email" autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="cmsg">Message</label>
+          <input id="cmsg" name="cmsg">
+        </div>
+        <div class="modal-actions">
+          <button class="btn" type="submit">Send</button>
+          <button class="btn" type="button" id="mailtoBtn">Email instead</button>
+        </div>
+        <div class="muted">We reply from crm@quickport.co.in</div>
+      </form>
+    </div>
+  </div>
+  <footer role="contentinfo">
+    <span>UDYAM‑MH‑18‑0408716 | ISO/IEC 27001 certification in progress; aligned to platform architecture</span>
+    <span class="tooltip" tabindex="0">DLT note
+      <span class="tip">All SMS use approved headers (QCKPRT) and template IDs with {#var#} placeholders per DoT guidelines.</span>
+    </span>
+  </footer>
+  <button class="fab" id="fabContact" aria-haspopup="dialog" aria-controls="contactBackdrop">Contact</button>
+  <script>
+  (function(){
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+    const phoneRe = /^\+91[6-9]\d{9}$/;
+    let resendAt = 0, attempts = 5, reqId = null, templId = null, templHeader = null;
+    
+    // Tier slider
+    let currentTier = 0;
+    const slides = $$('.tier-slide');
+    const prevBtn = $('#tierPrev');
+    const nextBtn = $('#tierNext');
+    
+    function showTier(idx) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+      currentTier = idx;
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === slides.length - 1;
+      const tierName = slides[idx].querySelector('h3').textContent;
+      prevBtn.setAttribute('aria-label', idx > 0 ? `Previous tier: ${slides[idx-1].querySelector('h3').textContent}` : 'Previous tier');
+      nextBtn.setAttribute('aria-label', idx < slides.length - 1 ? `Next tier: ${slides[idx+1].querySelector('h3').textContent}` : 'Next tier');
+    }
+    
+    prevBtn.addEventListener('click', () => { if (currentTier > 0) showTier(currentTier - 1); });
+    nextBtn.addEventListener('click', () => { if (currentTier < slides.length - 1) showTier(currentTier + 1); });
+    
+    document.addEventListener('keydown', (e) => {
+      if (!$('.tier-slider').contains(document.activeElement)) return;
+      if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); if (currentTier > 0) showTier(currentTier - 1); }
+      if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); if (currentTier < slides.length - 1) showTier(currentTier + 1); }
+      if (e.key === 'Home') { e.preventDefault(); showTier(0); }
+      if (e.key === 'End') { e.preventDefault(); showTier(slides.length - 1); }
+    });
+    
+    showTier(0);
+    
+    // Modal helpers
+    function openModal(id) {
+      const el = $(id);
+      if (!el) return;
+      el.classList.add('active');
+      const focusable = el.querySelector('input,button,[tabindex]:not([tabindex="-1"])');
+      setTimeout(() => focusable && focusable.focus(), 0);
+      el.addEventListener('keydown', trapFocus);
+    }
+    
+    function closeModal(id) {
+      const el = $(id);
+      if (!el) return;
+      el.classList.remove('active');
+      el.removeEventListener('keydown', trapFocus);
+    }
+    
+    function trapFocus(e) {
+      if (e.key !== 'Tab' && e.key !== 'Escape') return;
+      const root = e.currentTarget;
+      const nodes = $$('input,button,[tabindex]:not([tabindex="-1"])', root).filter(x => !x.disabled && x.offsetParent);
+      if (e.key === 'Escape') { closeModal('#' + root.id); return; }
+      if (!nodes.length) return;
+      const first = nodes[0], last = nodes[nodes.length - 1];
+      if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+      else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+    }
+    
+    $$('.close').forEach(b => b.addEventListener('click', e => {
+      const id = e.currentTarget.getAttribute('data-close');
+      closeModal('#' + id);
+    }));
+    
+    // OTP inputs
+    function wireOtp(boxId) {
+      const box = $(boxId);
+      if (!box) return;
+      const nodes = $$('input', box);
+      nodes.forEach((n, i) => {
+        n.addEventListener('input', () => {
+          n.value = n.value.replace(/\D/g, '').slice(0, 1);
+          if (n.value && i < nodes.length - 1) nodes[i + 1].focus();
+        });
+        n.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !n.value && i > 0) nodes[i - 1].focus();
+        });
+        n.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+          paste.split('').forEach((char, idx) => { if (nodes[idx]) nodes[idx].value = char; });
+          if (nodes[paste.length]) nodes[paste.length].focus();
+        });
+      });
+      return () => nodes.map(n => n.value).join('');
+    }
+    
+    const getPhoneOtp = wireOtp('#phoneOtpInputs');
+    const getEmailOtp = wireOtp('#emailOtpInputs');
+    
+    // Form validation
+    function setErr(id, msg) { const el = $(id); if (el) el.textContent = msg || ''; }
+    
+    $('#regForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const businessName = $('#businessName').value.trim();
+      const phone = $('#phone').value.trim();
+      const email = $('#email').value.trim();
+      let ok = true;
+      
+      setErr('#businessNameErr', ''); setErr('#phoneErr', ''); setErr('#emailErr', '');
+      
+      if (!businessName) { setErr('#businessNameErr', 'Business name is required.'); ok = false; }
+      if (!phoneRe.test(phone)) { setErr('#phoneErr', 'Enter a valid India E.164 number like +919876543210 (starts 6–9).'); ok = false; }
+      if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setErr('#emailErr', 'Enter a valid email address.'); ok = false; }
+      
+      if (!ok) return;
+      
+      $('#submitBtn').disabled = true;
+      try {
+        const res = await fetch('/api/auth/request-mobile-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phoneE164: phone, email, businessName })
+        });
+        const j = await res.json();
+        if (!res.ok) throw new Error(j?.message || 'Failed to request OTP');
+        
+        reqId = j.reqId || null;
+        templId = j.templateId || '—';
+        templHeader = j.header || '—';
+        $('#templId').textContent = templId;
+        $('#templHeader').textContent = templHeader;
+        $('#reqId').textContent = reqId || '—';
+        
+        attempts = 5;
+        resendAt = Date.now() + 30000;
+        updateResend();
+        openModal('#phoneOtpBackdrop');
+      } catch (err) {
+        alert('OTP request failed: ' + err.message);
+      } finally {
+        $('#submitBtn').disabled = false;
+      }
+    });
+    
+    function updateResend() {
+      const btn = $('#phoneResendBtn');
+      const left = Math.max(0, Math.ceil((resendAt - Date.now()) / 1000));
+      btn.textContent = left > 0 ? `Resend (${left}s)` : 'Resend';
+      btn.disabled = left > 0 || attempts <= 0;
+    }
+    
+    setInterval(updateResend, 250);
+    
+    $('#phoneResendBtn').addEventListener('click', async () => {
+      if (attempts <= 0) return;
+      attempts--;
+      $('#phoneAttempts').textContent = 'Attempts left: ' + attempts;
+      resendAt = Date.now() + 30000;
+      updateResend();
+      
+      try {
+        const phone = $('#phone').value.trim();
+        const email = $('#email').value.trim();
+        const businessName = $('#businessName').value.trim();
+        const res = await fetch('/api/auth/request-mobile-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phoneE164: phone, email, businessName, retry: true, reqId })
+        });
+        const j = await res.json();
+        if (!res.ok) throw new Error(j?.message || 'Retry failed');
+        reqId = j.reqId || reqId;
+      } catch (err) {
+        alert('Resend failed: ' + err.message);
+      }
+    });
+    
+    $('#phoneVerifyBtn').addEventListener('click', async () => {
+      const code = getPhoneOtp();
+      if (code.length !== 6) { setErr('#phoneOtpErr', 'Enter the 6-digit code.'); return; }
+      
+      setErr('#phoneOtpErr', '');
+      try {
+        const res = await fetch('/api/auth/verify-mobile-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reqId, otp: code })
+        });
+        const j = await res.json();
+        if (!res.ok) throw new Error(j?.message || 'Verification failed');
+        
+        window.dispatchEvent(new CustomEvent('qp:otp-verified', { detail: { reqId } }));
+        closeModal('#phoneOtpBackdrop');
+        
+        // Trigger email OTP
+        const email = $('#email').value.trim();
+        await fetch('/api/auth/request-email-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, context: 'registration' })
+        });
+        openModal('#emailOtpBackdrop');
+      } catch (err) {
+        setErr('#phoneOtpErr', err.message);
+      }
+    });
+    
+    $('#emailVerifyBtn').addEventListener('click', async () => {
+      const code = getEmailOtp();
+      if (code.length !== 6) { setErr('#emailOtpErr', 'Enter the 6-digit email code.'); return; }
+      
+      setErr('#emailOtpErr', '');
+      try {
+        const email = $('#email').value.trim();
+        const res = await fetch('/api/auth/verify-email-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, otp: code })
+        });
+        const j = await res.json();
+        if (!res.ok) throw new Error(j?.message || 'Email verification failed');
+        
+        closeModal('#emailOtpBackdrop');
+        
+        // Register
+        const businessName = $('#businessName').value.trim();
+        const phone = $('#phone').value.trim();
+        const regRes = await fetch('/api/auth/register-from-viasocket', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ businessName, phoneE164: phone, email, reqId, verifiedAt: new Date().toISOString() })
+        });
+        const regData = await regRes.json();
+        
+        localStorage.setItem('qp_session', JSON.stringify({ user: regData.user, token: regData.token }));
+        alert('Registration complete! Welcome to Quickport CRM.');
+        
+        // Simulate dashboard section
+        document.body.innerHTML = '<h1 style="text-align:center;margin-top:50px;">Welcome to Quickport CRM Dashboard</h1><p style="text-align:center;">Your account is ready!</p>';
+      } catch (err) {
+        setErr('#emailOtpErr', err.message);
+      }
+    });
+    
+    $('#emailResendBtn').addEventListener('click', () => alert('Email OTP resent (demo).'));
+    
+    // Contact
+    $('#fabContact').addEventListener('click', () => openModal('#contactBackdrop'));
+    $('#mailtoBtn').addEventListener('click', () => location.href = 'mailto:crm@quickport.co.in');
+    
+    $('#contactForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = { name: $('#cname').value, email: $('#cemail').value, message: $('#cmsg').value };
+      
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          alert('Thanks! We will get back to you.');
+          closeModal('#contactBackdrop');
+        } else {
+          alert('Could not send right now. Please email crm@quickport.co.in');
+        }
+      } catch {
+        alert('Network issue. Email crm@quickport.co.in');
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
